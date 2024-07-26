@@ -56,6 +56,7 @@ class DeleteTaskMutation extends Mutation
      */
     public function resolve($root, array $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields): array
     {
+        # delete a task
         $deleted = Task::destroy($args['id']);
 
         return [

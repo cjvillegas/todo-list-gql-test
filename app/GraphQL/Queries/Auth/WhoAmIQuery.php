@@ -43,11 +43,7 @@ class WhoAmIQuery extends Query
      */
     public function resolve($root, array $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields): ?Authenticatable
     {
-        /** @var SelectFields $fields */
-        $fields = $getSelectFields();
-        $select = $fields->getSelect();
-        $with = $fields->getRelations();
-
+        # return the currently authenticated user based on the provided bearer token
         return auth()->user();
     }
 }

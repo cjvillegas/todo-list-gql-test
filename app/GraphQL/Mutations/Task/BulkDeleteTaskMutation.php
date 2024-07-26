@@ -56,6 +56,7 @@ class BulkDeleteTaskMutation extends Mutation
      */
     public function resolve($root, array $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields): array
     {
+        # bulk delete tasks based on an array of tasks IDs
         $deleted = Task::whereIn('id', $args['ids'])->delete();
 
         return [

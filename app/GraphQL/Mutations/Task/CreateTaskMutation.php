@@ -47,6 +47,7 @@ class CreateTaskMutation extends Mutation
                     'string',
                     'required',
                     'max:255',
+                    # this rule ensure that task title will be unique for each user
                     Rule::unique('tasks')->where(function ($query) {
                         return $query->where('created_by_id', auth()->user()->id);
                     }),
@@ -65,6 +66,7 @@ class CreateTaskMutation extends Mutation
      */
     public function resolve($root, array $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields): mixed
     {
+        # create and return a task
         return Task::create([
             ...$args,
             'status' => Status::ACTIVE->value,

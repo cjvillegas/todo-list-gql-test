@@ -64,13 +64,13 @@ class UpdateTaskMutation extends Mutation
      */
     public function resolve($root, array $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields): mixed
     {
-        $fields = $getSelectFields();
-        $select = $fields->getSelect();
-        $with = $fields->getRelations();
-
+        # find the task to update, or fail if missing
         $task = Task::findOrFail($args['id']);
+
+        # update the task with the provided information, normally just the status, title and ID
         $task->update($args);
 
+        # rehydrate and return the updated task
         return $task->refresh();
     }
 }

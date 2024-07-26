@@ -57,11 +57,7 @@ class TaskQuery extends Query
      */
     public function resolve($root, array $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields): mixed
     {
-        /** @var SelectFields $fields */
-        $fields = $getSelectFields();
-        $select = $fields->getSelect();
-        $with = $fields->getRelations();
-
+        # get a single task, otherwise fail the request
         return Task::findOrFail($args['id']);
     }
 }

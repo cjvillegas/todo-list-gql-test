@@ -62,24 +62,24 @@ class LoginMutation extends Mutation
      */
     public function resolve($root, array $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields): array
     {
-        $fields = $getSelectFields();
-        $select = $fields->getSelect();
-        $with = $fields->getRelations();
-
+        # grab a user by the provided email address
         $user = User::where('email', $args['email'])->first();
 
+        # check if we have a user with the given email address
         if (!$user) {
             throw ValidationException::withMessages([
                 'email' => ['No user found with this email.'],
             ]);
         }
 
+        # check if the provided password match with the user password
         if (!Hash::check($args['password'], $user->password)) {
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
 
+        # return the user and a fresh token
         return [
             "token" => $user->createToken('App')->plainTextToken,
             "user" => $user->refresh(),

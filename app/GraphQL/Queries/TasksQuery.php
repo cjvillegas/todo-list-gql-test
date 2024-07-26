@@ -34,13 +34,6 @@ class TasksQuery extends Query
         return Type::listOf(GraphQL::type('Task'));
     }
 
-    public function args(): array
-    {
-        return [
-
-        ];
-    }
-
     /**
      * @param $root
      * @param array $args
@@ -51,6 +44,7 @@ class TasksQuery extends Query
      */
     public function resolve($root, array $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields): Collection
     {
+        # return the list of tasks for the current authed user
         return Task::where('created_by_id', auth()->user()->id)->get();
     }
 }

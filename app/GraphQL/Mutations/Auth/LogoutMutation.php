@@ -42,11 +42,7 @@ class LogoutMutation extends Mutation
      */
     public function resolve($root, array $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields): string
     {
-        $fields = $getSelectFields();
-        $select = $fields->getSelect();
-        $with = $fields->getRelations();
-
-        // Revoke the token that was used to authenticate the current request...
+        # Revoke the token that was used to authenticate the current request...
         auth()->user()->currentAccessToken()->delete();
 
         return 'Logout successful';
