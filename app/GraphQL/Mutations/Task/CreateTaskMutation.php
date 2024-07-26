@@ -11,7 +11,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Mutation;
-use Rebing\GraphQL\Support\SelectFields;
+use Illuminate\Validation\Rule;
 
 /**
  * @author Chaprel John Villegas <jv@synqup.com>
@@ -42,7 +42,15 @@ class CreateTaskMutation extends Mutation
         return [
             'title' => [
                 'type' => Type::nonNull(Type::string()),
-                'description' => 'The task title'
+                'description' => 'The task title',
+                'rules' => [
+                    'string',
+                    'required',
+                    'max:255',
+                    Rule::unique('tasks')->where(function ($query) {
+                        return $query->where('created_by_id', auth()->user()->id);
+                    }),
+                ]
             ]
         ];
     }

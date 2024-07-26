@@ -4,12 +4,24 @@ namespace Tests\Unit\Model;
 
 use App\Enums\Status;
 use App\Models\Task;
+use App\Models\User;
+use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class TaskTest extends TestCase
 {
     use RefreshDatabase;
+
+    /**
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        (new UserSeeder())->run();
+    }
 
     /**
      * Test creating a task
@@ -21,7 +33,8 @@ class TaskTest extends TestCase
         # prepare
         $data = [
             'title' => 'Task 1',
-            'status' => Status::ACTIVE->value
+            'status' => Status::ACTIVE->value,
+            'created_by_id' => User::first()->id
         ];
 
         # execute
@@ -41,7 +54,8 @@ class TaskTest extends TestCase
         # prepare
         $task = Task::create([
             'title' => 'Task 1',
-            'status' => Status::ACTIVE->value
+            'status' => Status::ACTIVE->value,
+            'created_by_id' => User::first()->id
         ]);
 
         # execute
@@ -62,7 +76,11 @@ class TaskTest extends TestCase
     public function testReadTask()
     {
         # prepare
-        $task = Task::create(['title' => 'Task 1', 'status' => Status::ACTIVE->value]);
+        $task = Task::create([
+            'title' => 'Task 1',
+            'status' => Status::ACTIVE->value,
+            'created_by_id' => User::first()->id
+        ]);
 
         # execute
         $foundTask = Task::find($task->id);
@@ -80,7 +98,11 @@ class TaskTest extends TestCase
     public function testDeleteTask()
     {
         # prepare
-        $task = Task::create(['title' => 'Task 1', 'status' => Status::ACTIVE->value]);
+        $task = Task::create([
+            'title' => 'Task 1',
+            'status' => Status::ACTIVE->value,
+            'created_by_id' => User::first()->id
+        ]);
 
         # execute
         $task->delete();
