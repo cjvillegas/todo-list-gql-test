@@ -46,6 +46,10 @@ class UpdateTaskMutation extends Mutation
             'title' => [
                 'name' => 'title',
                 'type' => Type::nonNull(Type::string())
+            ],
+            'status' => [
+                'name' => 'status',
+                'type' => Type::nonNull(Type::int())
             ]
         ];
     }

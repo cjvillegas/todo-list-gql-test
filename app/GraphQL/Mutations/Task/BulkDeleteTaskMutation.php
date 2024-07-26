@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\GraphQL\Mutations\Task;
 
-use App\Enums\Status;
 use App\Models\Task;
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -16,14 +15,14 @@ use Rebing\GraphQL\Support\SelectFields;
 /**
  * @author Chaprel John Villegas <jv@synqup.com>
  */
-class CreateTaskMutation extends Mutation
+class BulkDeleteTaskMutation extends Mutation
 {
     /**
      * @var string[]
      */
     protected $attributes = [
-        'name' => 'createTask',
-        'description' => 'Create a new Task'
+        'name' => 'bulkDeleteTask',
+        'description' => 'Pass list of IDs to remove'
     ];
 
     /**
@@ -31,18 +30,18 @@ class CreateTaskMutation extends Mutation
      */
     public function type(): Type
     {
-        return GraphQL::type('Task');
+        return GraphQL::type('BulkDeleteTaskResponse');
     }
 
     /**
-     * @return array[]
+     * @return array
      */
     public function args(): array
     {
         return [
-            'title' => [
-                'type' => Type::nonNull(Type::string()),
-                'description' => 'The task title'
+            'ids' => [
+                'name' => 'ids',
+                'type' => Type::listOf(Type::int())
             ]
         ];
     }
@@ -53,14 +52,15 @@ class CreateTaskMutation extends Mutation
      * @param $context
      * @param ResolveInfo $resolveInfo
      * @param Closure $getSelectFields
-     * @return mixed
+     * @return array
      */
-    public function resolve($root, array $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields): mixed
+    public function resolve($root, array $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields): array
     {
-        return Task::create([
-            ...$args,
-            'status' => Status::ACTIVE->value,
-            'created_by_id' => auth()->user()->id
-        ]);
+        $deleted = Task::whereIn('id', $args['ids'])->delete();
+
+        return [
+            'message' => $deleted ? 'Tasks deleted' : 'Something went wrong',
+            'success' => !!$deleted
+        ];
     }
 }

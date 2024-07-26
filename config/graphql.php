@@ -89,7 +89,9 @@ return [
             ],
 
             // Laravel HTTP middleware
-            'middleware' => null,
+            'middleware' => [
+                \Illuminate\Http\Middleware\HandleCors::class
+            ],
 
             // Which HTTP methods to support; must be given in UPPERCASE!
             'method' => ['GET', 'POST'],
@@ -113,6 +115,7 @@ return [
 
             // Laravel HTTP middleware
             'middleware' => [
+                \Illuminate\Http\Middleware\HandleCors::class,
                 'auth:sanctum'
             ]
         ],
@@ -125,16 +128,20 @@ return [
             'mutation' => [
                 \App\GraphQL\Mutations\Task\CreateTaskMutation::class,
                 \App\GraphQL\Mutations\Task\UpdateTaskMutation::class,
-                \App\GraphQL\Mutations\Task\DeleteTaskMutation::class
+                \App\GraphQL\Mutations\Task\DeleteTaskMutation::class,
+                \App\GraphQL\Mutations\Task\BulkDeleteTaskMutation::class
             ],
             // The types only available in this schema
             'types' => [
                 \App\GraphQL\Types\TaskType::class,
-                \App\GraphQL\Types\UserType::class
+                \App\GraphQL\Types\UserType::class,
+                \App\GraphQL\Types\Response\DeleteTaskResponseType::class,
+                \App\GraphQL\Types\Response\BulkDeleteTaskResponseType::class
             ],
 
             // Laravel HTTP middleware
             'middleware' => [
+                \Illuminate\Http\Middleware\HandleCors::class,
                 'auth:sanctum'
             ],
 

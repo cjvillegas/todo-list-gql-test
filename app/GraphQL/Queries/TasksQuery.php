@@ -51,11 +51,6 @@ class TasksQuery extends Query
      */
     public function resolve($root, array $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields): Collection
     {
-        /** @var SelectFields $fields */
-        $fields = $getSelectFields();
-        $select = $fields->getSelect();
-        $with = $fields->getRelations();
-
-        return Task::all();
+        return Task::where('created_by_id', auth()->user()->id)->get();
     }
 }

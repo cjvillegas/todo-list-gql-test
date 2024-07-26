@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('created_by_id');
             $table->string('title', 255)->comment('The tasks title');
             $table->tinyInteger('status')->default(1)->comment('The tasks status. Should only be 1 or 2. 1 = active, 2 = completed');
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
+
+            $table->foreign('created_by_id')->references('id')->on('users')->cascadeOnDelete();
         });
     }
 

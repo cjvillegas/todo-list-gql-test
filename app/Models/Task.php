@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
+ * @extends Model
  * @author Chaprel John Villegas <jv@synqup.com>
  */
 class Task extends Model
@@ -18,6 +19,7 @@ class Task extends Model
      */
     protected $fillable = [
         'title',
-        'status'
+        'status',
+        'created_by_id'
     ];
 }

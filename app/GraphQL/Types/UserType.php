@@ -30,9 +30,13 @@ class UserType extends GraphQLType
                 'type' => Type::id(),
                 'description' => 'The user ID. Auto-incremented.'
             ],
-            "name" => [
+            "first_name" => [
                 "type" => Type::nonNull(Type::string()),
-                "description" => "User full name",
+                "description" => "User first name",
+            ],
+            "last_name" => [
+                "type" => Type::string(),
+                "description" => "User last name",
             ],
             "email" => [
                 "type" => Type::nonNull(Type::string()),

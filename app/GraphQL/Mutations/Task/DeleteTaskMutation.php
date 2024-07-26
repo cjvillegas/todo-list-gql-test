@@ -8,6 +8,7 @@ use App\Models\Task;
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
+use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Mutation;
 use Rebing\GraphQL\Support\SelectFields;
 
@@ -29,7 +30,7 @@ class DeleteTaskMutation extends Mutation
      */
     public function type(): Type
     {
-        return Type::listOf(Type::string());
+        return GraphQL::type('DeleteTaskResponse');
     }
 
     /**
@@ -55,15 +56,12 @@ class DeleteTaskMutation extends Mutation
      */
     public function resolve($root, array $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields): array
     {
-        $fields = $getSelectFields();
-        $select = $fields->getSelect();
-        $with = $fields->getRelations();
-
         $deleted = Task::destroy($args['id']);
 
         return [
             'message' => $deleted ? 'Task deleted successfully' : 'Task not found',
-            'id' => $args['id']
+            'id' => $args['id'],
+            'success' => $deleted
         ];
     }
 }
